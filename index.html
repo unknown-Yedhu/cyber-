@@ -1,0 +1,99 @@
+<html>
+<head>
+    <title>Simple Login Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            text-align: center;
+            margin-top: 100px;
+        }
+
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            display: inline-block;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        input {
+            padding: 8px;
+            margin: 5px 0;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Login</h2>
+
+    <form id="loginForm">
+        <label>Username:</label><br>
+        <input type="text" id="username" required><br>
+
+        <label>Password:</label><br>
+        <input type="password" required><br>
+
+        <input type="submit" value="Login">
+    </form>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // prevent default form submission
+            const username = document.getElementById('username').value;
+            // Redirect to welcome.html with username as query parameter
+            window.location.href = `welcome.html?user=${encodeURIComponent(username)}`;
+        });
+    </script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            text-align: center;
+            margin-top: 100px;
+        }
+        h2 {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h2 id="welcomeText">Welcome!</h2>
+    <p>You have successfully logged in.</p>
+
+    <script>
+        // Get username from URL
+        const params = new URLSearchParams(window.location.search);
+        const user = params.get('user');
+        if(user) {
+            document.getElementById('welcomeText').innerText = `Welcome, ${user}!`;
+        }
+    </script>
+</body>
+</html>
