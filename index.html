@@ -1,99 +1,132 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Simple Login Page</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f4f8;
-            text-align: center;
-            margin-top: 100px;
-        }
-
-        form {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            display: inline-block;
-        }
-
-        h2 {
-            color: #333;
-        }
-
-        input {
-            padding: 8px;
-            margin: 5px 0;
-            width: 200px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        input[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        input[type="submit"]:hover {
-            background-color: #45a049;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Secure Login with Math CAPTCHA</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    form {
+      background: #fff;
+      padding: 20px 30px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+      width: 340px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .error {
+      color: red;
+      font-size: 14px;
+      text-align: center;
+      margin-top: 10px;
+    }
+    .captcha-box {
+      margin: 10px 0;
+      font-size: 14px;
+    }
+  </style>
 </head>
 <body>
-
+  <form id="loginForm" autocomplete="off">
     <h2>Login</h2>
+    <input type="text" id="username" placeholder="Username" required minlength="3">
+    <input type="password" id="password" placeholder="Password" required minlength="5">
 
-    <form id="loginForm">
-        <label>Username:</label><br>
-        <input type="text" id="username" required><br>
+    <!-- Offline Math CAPTCHA -->
+    <div class="captcha-box">
+      <label id="captchaQuestion"></label>
+      <input type="text" id="captchaAnswer" placeholder="Enter answer" required>
+    </div>
 
-        <label>Password:</label><br>
-        <input type="password" required><br>
+    <button type="submit">Login</button>
+    <div class="error" id="errorMsg"></div>
+  </form>
 
-        <input type="submit" value="Login">
-    </form>
+  <script>
+    // Demo credentials
+    const validUser = "admin";
+    const validPass = "password123";
 
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // prevent default form submission
-            const username = document.getElementById('username').value;
-            // Redirect to welcome.html with username as query parameter
-            window.location.href = `welcome.html?user=${encodeURIComponent(username)}`;
-        });
-    </script>
+    // Generate random math captcha
+    const num1 = Math.floor(Math.random() * 10) + 1;
+    const num2 = Math.floor(Math.random() * 10) + 1;
+    document.getElementById("captchaQuestion").innerText = `Solve: ${num1} + ${num2} = ?`;
+    const correctAnswer = num1 + num2;
 
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const user = document.getElementById("username").value.trim();
+      const pass = document.getElementById("password").value.trim();
+      const offlineCaptcha = document.getElementById("captchaAnswer").value.trim();
+
+      // Check Offline Math CAPTCHA
+      if (parseInt(offlineCaptcha) !== correctAnswer) {
+        document.getElementById("errorMsg").innerText = "Math CAPTCHA incorrect!";
+        return;
+      }
+
+      // Check login credentials
+      if (user === validUser && pass === validPass) {
+        window.location.href = "welcome.html";
+      } else {
+        document.getElementById("errorMsg").innerText = "Invalid username or password!";
+      }
+    });
+  </script>
 </body>
 </html>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Welcome</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f4f8;
-            text-align: center;
-            margin-top: 100px;
-        }
-        h2 {
-            color: #333;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Welcome</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #e6f7ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    h1 {
+      color: #007bff;
+    }
+  </style>
 </head>
 <body>
-    <h2 id="welcomeText">Welcome!</h2>
-    <p>You have successfully logged in.</p>
-
-    <script>
-        // Get username from URL
-        const params = new URLSearchParams(window.location.search);
-        const user = params.get('user');
-        if(user) {
-            document.getElementById('welcomeText').innerText = `Welcome, ${user}!`;
-        }
-    </script>
+  <h1>🎉 Welcome! Login Successful 🎉</h1>
 </body>
 </html>
+
